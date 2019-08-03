@@ -91,6 +91,9 @@ public class DatabaseGUI extends Application {
         
         tabPane.setOnMouseClicked(e -> {updateTabPane(primaryStage); });
         tabPane.setOnKeyReleased(e -> {updateTabPane(primaryStage); });
+        
+        criminalSearchTxt.setOnKeyPressed(e->{if(e.getCode()==KeyCode.ENTER) criminalSearch();});
+        officerSearchTxt.setOnKeyPressed(e->{if(e.getCode()==KeyCode.ENTER) criminalSearch();});
 
         criminalSearchBtn.setOnAction(e -> criminalSearch());
         criminalSearchBtn.setOnKeyPressed(e -> { if(e.getCode() == KeyCode.ENTER) criminalSearch();});
@@ -228,7 +231,16 @@ public class DatabaseGUI extends Application {
             } else if (str == "Name") {
                 String[] strArr = criminalSearchTxt.getText().trim().split(" ");
                 try {
-                    criminalsTable.setItems(DatabaseInterface.criminalNameQuery((String)strArr[0], (String)strArr[1]));
+                	
+                	if(strArr.length == 2) {
+                    criminalsTable.setItems(DatabaseInterface.criminalFullNameQuery((String)strArr[0], (String)strArr[1]));
+                	}
+                	else if (strArr.length == 1) {
+                		criminalsTable.setItems(DatabaseInterface.criminalNameQuery((String)strArr[0]));
+                	}
+                	else {
+                		 DatabaseGUI.errorStage("Invalid Name Entry");
+                	}
                 }
                 catch (Exception e) {
                     DatabaseGUI.errorStage("Put a space Between First & Last Name");
