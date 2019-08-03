@@ -35,7 +35,21 @@ public class DatabaseInterface {
         return list;
     }
 
-    public static ObservableList<CriminalRecord> criminalNameQuery(String firstName, String lastName) {
+    public static ObservableList<CriminalRecord> criminalNameQuery(String name) {
+        ResultSet rs = DatabaseInterface.databaseRetrieve("SELECT * FROM Criminals WHERE FirstName = \"" + name + "\" OR LastName = \"" + name + "\";");
+        ObservableList<CriminalRecord> list = FXCollections.observableArrayList();
+        try {
+            while (rs.next()) {
+                list.add(new CriminalRecord(Integer.valueOf(rs.getString(1)).intValue(), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), Integer.valueOf(rs.getString(7)).intValue(), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14).substring(0, 10)));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public static ObservableList<CriminalRecord> criminalFullNameQuery(String firstName, String lastName) {
         ResultSet rs = DatabaseInterface.databaseRetrieve("SELECT * FROM Criminals WHERE FirstName = \"" + firstName + "\" AND LastName = \"" + lastName + "\";");
         ObservableList<CriminalRecord> list = FXCollections.observableArrayList();
         try {
